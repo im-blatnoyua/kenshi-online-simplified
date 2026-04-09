@@ -24,25 +24,54 @@ if %errorlevel% neq 0 (
 
 :: Поиск Kenshi
 set "KENSHI_PATH="
-set "STEAM_PATH=C:\Program Files (x86)\Steam\steamapps\common\Kenshi"
-set "GOG_PATH=C:\GOG Games\Kenshi"
+echo [→] Поиск установки Kenshi...
 
-if exist "%STEAM_PATH%\kenshi_x64.exe" (
-    set "KENSHI_PATH=%STEAM_PATH%"
-    echo [✓] Найден Kenshi (Steam): %STEAM_PATH%
-) else if exist "%GOG_PATH%\kenshi_x64.exe" (
-    set "KENSHI_PATH=%GOG_PATH%"
-    echo [✓] Найден Kenshi (GOG): %GOG_PATH%
-) else (
-    echo [!] Kenshi не найден автоматически!
-    echo.
-    set /p "KENSHI_PATH=Введите путь к Kenshi (где находится kenshi_x64.exe): "
-    if not exist "!KENSHI_PATH!\kenshi_x64.exe" (
-        echo [!] Неверный путь! kenshi_x64.exe не найден.
-        pause
-        exit /b 1
+:: Список возможных путей
+set "PATHS[0]=C:\Program Files (x86)\Steam\steamapps\common\Kenshi"
+set "PATHS[1]=C:\Program Files\Steam\steamapps\common\Kenshi"
+set "PATHS[2]=D:\Steam\steamapps\common\Kenshi"
+set "PATHS[3]=E:\Steam\steamapps\common\Kenshi"
+set "PATHS[4]=C:\GOG Games\Kenshi"
+set "PATHS[5]=D:\GOG Games\Kenshi"
+set "PATHS[6]=C:\Games\Kenshi"
+set "PATHS[7]=D:\Games\Kenshi"
+
+:: Проверка всех путей
+for /L %%i in (0,1,7) do (
+    if exist "!PATHS[%%i]!\kenshi_x64.exe" (
+        set "KENSHI_PATH=!PATHS[%%i]!"
+        echo [✓] Найден Kenshi: !KENSHI_PATH!
+        goto :found
     )
 )
+
+:: Если не найден, запросить у пользователя
+:notfound
+echo [!] Kenshi не найден автоматически!
+echo.
+echo Примеры путей:
+echo   C:\Program Files (x86)\Steam\steamapps\common\Kenshi
+echo   C:\GOG Games\Kenshi
+echo   D:\Steam\steamapps\common\Kenshi
+echo.
+
+:askpath
+set /p "KENSHI_PATH=Введите полный путь к папке Kenshi: "
+
+:: Убрать кавычки если есть
+set "KENSHI_PATH=%KENSHI_PATH:"=%"
+
+if exist "%KENSHI_PATH%\kenshi_x64.exe" (
+    echo [✓] Путь подтвержден: %KENSHI_PATH%
+    goto :found
+) else (
+    echo [!] Файл kenshi_x64.exe не найден по пути: %KENSHI_PATH%
+    echo [?] Попробуйте ещё раз или нажмите Ctrl+C для выхода
+    echo.
+    goto :askpath
+)
+
+:found
 
 echo.
 echo ════════════════════════════════════════

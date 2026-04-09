@@ -20,27 +20,65 @@ NC='\033[0m' # No Color
 
 # Поиск Kenshi
 KENSHI_PATH=""
-STEAM_PROTON="$HOME/.steam/steam/steamapps/common/Kenshi"
-STEAM_NATIVE="$HOME/.local/share/Steam/steamapps/common/Kenshi"
-WINE_PREFIX="$HOME/.wine/drive_c/Program Files (x86)/Steam/steamapps/common/Kenshi"
+echo -e "${YELLOW}[→]${NC} Поиск установки Kenshi..."
 
-if [ -f "$STEAM_PROTON/kenshi_x64.exe" ]; then
-    KENSHI_PATH="$STEAM_PROTON"
-    echo -e "${GREEN}[✓]${NC} Найден Kenshi (Steam/Proton): $KENSHI_PATH"
-elif [ -f "$STEAM_NATIVE/kenshi_x64.exe" ]; then
-    KENSHI_PATH="$STEAM_NATIVE"
-    echo -e "${GREEN}[✓]${NC} Найден Kenshi (Steam): $KENSHI_PATH"
-elif [ -f "$WINE_PREFIX/kenshi_x64.exe" ]; then
-    KENSHI_PATH="$WINE_PREFIX"
-    echo -e "${GREEN}[✓]${NC} Найден Kenshi (Wine): $KENSHI_PATH"
-else
+# Список возможных путей
+SEARCH_PATHS=(
+    "$HOME/.steam/steam/steamapps/common/Kenshi"
+    "$HOME/.local/share/Steam/steamapps/common/Kenshi"
+    "$HOME/.var/app/com.valvesoftware.Steam/.local/share/Steam/steamapps/common/Kenshi"
+    "$HOME/.wine/drive_c/Program Files (x86)/Steam/steamapps/common/Kenshi"
+    "$HOME/.wine/drive_c/GOG Games/Kenshi"
+    "/mnt/c/Program Files (x86)/Steam/steamapps/common/Kenshi"
+    "/mnt/c/GOG Games/Kenshi"
+)
+
+# Поиск по известным путям
+for path in "${SEARCH_PATHS[@]}"; do
+    if [ -f "$path/kenshi_x64.exe" ]; then
+        KENSHI_PATH="$path"
+        echo -e "${GREEN}[✓]${NC} Найден Kenshi: $KENSHI_PATH"
+        break
+    fi
+done
+
+# Если не найден, попробовать найти через find (может занять время)
+if [ -z "$KENSHI_PATH" ]; then
+    echo -e "${YELLOW}[→]${NC} Поиск в домашней директории (может занять время)..."
+    FOUND_PATH=$(find "$HOME" -name "kenshi_x64.exe" -type f 2>/dev/null | head -1)
+    if [ -n "$FOUND_PATH" ]; then
+        KENSHI_PATH=$(dirname "$FOUND_PATH")
+        echo -e "${GREEN}[✓]${NC} Найден Kenshi: $KENSHI_PATH"
+    fi
+fi
+
+# Если всё ещё не найден, запросить у пользователя
+if [ -z "$KENSHI_PATH" ]; then
     echo -e "${RED}[!]${NC} Kenshi не найден автоматически!"
     echo ""
-    read -p "Введите путь к Kenshi (где находится kenshi_x64.exe): " KENSHI_PATH
-    if [ ! -f "$KENSHI_PATH/kenshi_x64.exe" ]; then
-        echo -e "${RED}[!]${NC} Неверный путь! kenshi_x64.exe не найден."
-        exit 1
-    fi
+    echo "Примеры путей:"
+    echo "  ~/.steam/steam/steamapps/common/Kenshi"
+    echo "  ~/.wine/drive_c/Program Files (x86)/Steam/steamapps/common/Kenshi"
+    echo ""
+
+    while true; do
+        read -p "Введите полный путь к папке Kenshi: " KENSHI_PATH
+
+        # Убрать кавычки если есть
+        KENSHI_PATH="${KENSHI_PATH%\"}"
+        KENSHI_PATH="${KENSHI_PATH#\"}"
+
+        # Убрать trailing slash
+        KENSHI_PATH="${KENSHI_PATH%/}"
+
+        if [ -f "$KENSHI_PATH/kenshi_x64.exe" ]; then
+            echo -e "${GREEN}[✓]${NC} Путь подтвержден: $KENSHI_PATH"
+            break
+        else
+            echo -e "${RED}[!]${NC} Файл kenshi_x64.exe не найден по пути: $KENSHI_PATH"
+            echo -e "${YELLOW}[?]${NC} Попробуйте ещё раз или нажмите Ctrl+C для выхода"
+        fi
+    done
 fi
 
 echo ""
