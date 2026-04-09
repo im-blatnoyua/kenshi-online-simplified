@@ -1,0 +1,53 @@
+# Build output
+build/
+*.obj
+*.lib
+*.dll
+*.exe
+*.pdb
+*.ilk
+*.exp
+*.iobj
+*.ipdb
+*.log
+*.tlog
+
+# Visual Studio
+.vs/
+*.vcxproj.user
+*.suo
+*.sdf
+*.opensdf
+*.cachefile
+*.ipch
+Debug/
+Release/
+x64/
+*.VC.db
+*.VC.opendb
+encrypteddata/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+
+# OS files
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# Kenshi logs
+kenshi*.log
+
+# Misc
+*.zip
+*.bak
+*.tmp
