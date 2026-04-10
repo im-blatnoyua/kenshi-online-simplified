@@ -1,0 +1,10 @@
+Kenshi Online v1.0.4
+
+Release Date: 2026-04-10
+
+Changes:
+- Fixed INSTALL_RU.bat encoding (Windows-1251)
+- Fixed CRLF line endings for all .bat files
+- Now works on all Windows versions
+
+Download: https://github.com/im-blatnoyua/kenshi-online-simplified/releases

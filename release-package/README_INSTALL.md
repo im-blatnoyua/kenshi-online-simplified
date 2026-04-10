@@ -1,4 +1,4 @@
-# Kenshi Online - Simplified Installation
+# Kenshi Online v1.0.4 - Simplified Installation
 
 **16-player co-op multiplayer mod for Kenshi**
 
