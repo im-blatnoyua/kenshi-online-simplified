@@ -43,8 +43,9 @@ chmod +x install.sh
 
 ## 🐛 Что исправлено в v1.0.4
 
-- **INSTALL_RU.bat** конвертирован из UTF-8 в Windows-1251
+- **INSTALL_RU.bat** конвертирован из UTF-8 в Windows-1251 (CP1251)
 - Убрана проблемная команда `chcp 65001`
+- **Исправлены окончания строк** - все .bat файлы теперь с CRLF (Windows)
 - Теперь кириллица отображается корректно на всех Windows
 - Исправлены все ошибки "is not recognized as internal command"
 
