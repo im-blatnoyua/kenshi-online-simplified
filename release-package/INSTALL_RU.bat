@@ -1,24 +1,23 @@
 @echo off
-chcp 65001 >nul 2>&1
 setlocal enabledelayedexpansion
 
 echo.
 echo ============================================
-echo   Kenshi Online - РЈСЃС‚Р°РЅРѕРІРєР°
+echo   Kenshi Online - Установка
 echo ============================================
 echo.
 
 net session >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [!] РўСЂРµР±СѓСЋС‚СЃСЏ РїСЂР°РІР° Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР°!
-    echo [!] Р—Р°РїСѓСЃС‚РёС‚Рµ РѕС‚ РёРјРµРЅРё Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР°.
+    echo [!] Требуются права администратора!
+    echo [!] Запустите от имени администратора.
     echo.
     pause
     exit /b 1
 )
 
 set "KENSHI_PATH="
-echo [*] РџРѕРёСЃРє Kenshi...
+echo [*] Поиск Kenshi...
 
 set "PATHS[0]=C:\Program Files (x86)\Steam\steamapps\common\Kenshi"
 set "PATHS[1]=C:\Program Files\Steam\steamapps\common\Kenshi"
@@ -32,28 +31,28 @@ set "PATHS[7]=D:\Games\Kenshi"
 for /L %%i in (0,1,7) do (
     if exist "!PATHS[%%i]!\kenshi_x64.exe" (
         set "KENSHI_PATH=!PATHS[%%i]!"
-        echo [OK] РќР°Р№РґРµРЅ: !KENSHI_PATH!
+        echo [OK] Найден: !KENSHI_PATH!
         goto found
     )
 )
 
 :notfound
-echo [!] Kenshi РЅРµ РЅР°Р№РґРµРЅ!
+echo [!] Kenshi не найден!
 echo.
-echo РџСЂРёРјРµСЂС‹:
+echo Примеры:
 echo   C:\Program Files (x86)\Steam\steamapps\common\Kenshi
 echo   C:\GOG Games\Kenshi
 echo.
 
 :askpath
-set /p "KENSHI_PATH=Р’РІРµРґРёС‚Рµ РїСѓС‚СЊ Рє Kenshi: "
+set /p "KENSHI_PATH=Введите путь к Kenshi: "
 set "KENSHI_PATH=!KENSHI_PATH:"=!"
 
 if exist "!KENSHI_PATH!\kenshi_x64.exe" (
-    echo [OK] РџСѓС‚СЊ РїРѕРґС‚РІРµСЂР¶РґРµРЅ
+    echo [OK] Путь подтвержден
     goto found
 ) else (
-    echo [!] kenshi_x64.exe РЅРµ РЅР°Р№РґРµРЅ
+    echo [!] kenshi_x64.exe не найден
     echo.
     goto askpath
 )
@@ -61,39 +60,39 @@ if exist "!KENSHI_PATH!\kenshi_x64.exe" (
 :found
 echo.
 echo ============================================
-echo   РЈСЃС‚Р°РЅРѕРІРєР° С„Р°Р№Р»РѕРІ...
+echo   Установка файлов...
 echo ============================================
 
 echo [*] KenshiMP.Core.dll...
 copy /Y "dist\KenshiMP.Core.dll" "!KENSHI_PATH!\" >nul 2>&1
 if errorlevel 1 (
-    echo [!] РћС€РёР±РєР°. Р—Р°РєСЂРѕР№С‚Рµ Kenshi.
+    echo [!] Ошибка. Закройте Kenshi.
     pause
     exit /b 1
 )
-echo [OK] РЈСЃС‚Р°РЅРѕРІР»РµРЅ
+echo [OK] Установлен
 
 echo [*] KenshiMP.Injector.exe...
 copy /Y "dist\KenshiMP.Injector.exe" "!KENSHI_PATH!\" >nul 2>&1
-echo [OK] РЈСЃС‚Р°РЅРѕРІР»РµРЅ
+echo [OK] Установлен
 
 echo [*] KenshiMP.Server.exe...
 copy /Y "dist\KenshiMP.Server.exe" "!KENSHI_PATH!\" >nul 2>&1
-echo [OK] РЈСЃС‚Р°РЅРѕРІР»РµРЅ
+echo [OK] Установлен
 
 echo [*] server.json...
 copy /Y "dist\server.json" "!KENSHI_PATH!\" >nul 2>&1
-echo [OK] РЈСЃС‚Р°РЅРѕРІР»РµРЅ
+echo [OK] Установлен
 
 echo [*] kenshi-online.mod...
 copy /Y "dist\kenshi-online.mod" "!KENSHI_PATH!\" >nul 2>&1
-echo [OK] РЈСЃС‚Р°РЅРѕРІР»РµРЅ
+echo [OK] Установлен
 
-echo [*] РќР°СЃС‚СЂРѕР№РєР° Plugins_x64.cfg...
+echo [*] Настройка Plugins_x64.cfg...
 set "PLUGINS_CFG=!KENSHI_PATH!\Plugins_x64.cfg"
 
 if not exist "!PLUGINS_CFG!" (
-    echo [!] Plugins_x64.cfg РЅРµ РЅР°Р№РґРµРЅ!
+    echo [!] Plugins_x64.cfg не найден!
     pause
     exit /b 1
 )
@@ -101,37 +100,37 @@ if not exist "!PLUGINS_CFG!" (
 findstr /C:"Plugin=KenshiMP.Core" "!PLUGINS_CFG!" >nul 2>&1
 if errorlevel 1 (
     echo Plugin=KenshiMP.Core>> "!PLUGINS_CFG!"
-    echo [OK] Р”РѕР±Р°РІР»РµРЅРѕ РІ РєРѕРЅС„РёРі
+    echo [OK] Добавлено в конфиг
 ) else (
-    echo [OK] РЈР¶Рµ РЅР°СЃС‚СЂРѕРµРЅ
+    echo [OK] Уже настроен
 )
 
-echo [*] GUI С„Р°Р№Р»С‹...
+echo [*] GUI файлы...
 if not exist "!KENSHI_PATH!\data\gui\layout" mkdir "!KENSHI_PATH!\data\gui\layout"
 copy /Y "dist\Kenshi_MultiplayerPanel.layout" "!KENSHI_PATH!\data\gui\layout\" >nul 2>&1
 copy /Y "dist\Kenshi_MultiplayerHUD.layout" "!KENSHI_PATH!\data\gui\layout\" >nul 2>&1
 copy /Y "dist\Kenshi_MainMenu.layout" "!KENSHI_PATH!\data\gui\layout\" >nul 2>&1
-echo [OK] РЈСЃС‚Р°РЅРѕРІР»РµРЅС‹
+echo [OK] Установлены
 
-echo [*] РЎРѕР·РґР°РЅРёРµ СЏСЂР»С‹РєР°...
+echo [*] Создание ярлыка...
 set "DESKTOP=%USERPROFILE%\Desktop"
 set "SHORTCUT=!DESKTOP!\Kenshi Online.lnk"
 
 powershell -Command "$WS = New-Object -ComObject WScript.Shell; $SC = $WS.CreateShortcut('!SHORTCUT!'); $SC.TargetPath = '!KENSHI_PATH!\KenshiMP.Injector.exe'; $SC.WorkingDirectory = '!KENSHI_PATH!'; $SC.Save()" >nul 2>&1
 if not errorlevel 1 (
-    echo [OK] РЇСЂР»С‹Рє СЃРѕР·РґР°РЅ
+    echo [OK] Ярлык создан
 )
 
 echo.
 echo ============================================
-echo   РЈСЃС‚Р°РЅРѕРІРєР° Р·Р°РІРµСЂС€РµРЅР°!
+echo   Установка завершена!
 echo ============================================
 echo.
-echo Р—Р°РїСѓСЃРє:
-echo   - РЇСЂР»С‹Рє "Kenshi Online" РЅР° СЂР°Р±РѕС‡РµРј СЃС‚РѕР»Рµ
-echo   - РР»Рё: !KENSHI_PATH!\KenshiMP.Injector.exe
+echo Запуск:
+echo   - Ярлык "Kenshi Online" на рабочем столе
+echo   - Или: !KENSHI_PATH!\KenshiMP.Injector.exe
 echo.
-echo РЎРµСЂРІРµСЂ:
+echo Сервер:
 echo   - !KENSHI_PATH!\KenshiMP.Server.exe
 echo.
 pause
