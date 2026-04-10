@@ -20,16 +20,17 @@ if %errorlevel% neq 0 (
 set "KENSHI_PATH="
 echo [*] Searching for Kenshi installation...
 
-set "PATHS[0]=C:\Program Files (x86)\Steam\steamapps\common\Kenshi"
-set "PATHS[1]=C:\Program Files\Steam\steamapps\common\Kenshi"
-set "PATHS[2]=D:\Steam\steamapps\common\Kenshi"
-set "PATHS[3]=E:\Steam\steamapps\common\Kenshi"
-set "PATHS[4]=C:\GOG Games\Kenshi"
-set "PATHS[5]=D:\GOG Games\Kenshi"
-set "PATHS[6]=C:\Games\Kenshi"
-set "PATHS[7]=D:\Games\Kenshi"
+set "PATHS[0]=C:\Steam\steamapps\common\Kenshi"
+set "PATHS[1]=C:\Program Files (x86)\Steam\steamapps\common\Kenshi"
+set "PATHS[2]=C:\Program Files\Steam\steamapps\common\Kenshi"
+set "PATHS[3]=D:\Steam\steamapps\common\Kenshi"
+set "PATHS[4]=E:\Steam\steamapps\common\Kenshi"
+set "PATHS[5]=C:\GOG Games\Kenshi"
+set "PATHS[6]=D:\GOG Games\Kenshi"
+set "PATHS[7]=C:\Games\Kenshi"
+set "PATHS[8]=D:\Games\Kenshi"
 
-for /L %%i in (0,1,7) do (
+for /L %%i in (0,1,8) do (
     if exist "!PATHS[%%i]!\kenshi_x64.exe" (
         set "KENSHI_PATH=!PATHS[%%i]!"
         echo [OK] Found Kenshi: !KENSHI_PATH!
